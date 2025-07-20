@@ -1,67 +1,67 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { extractDomain, isValidDomain, findTabsByDomain } from '../../src/utils/domain';
 
-describe('Domain Utils', () => {
+describe('ドメインユーティリティテスト', () => {
   describe('extractDomain', () => {
-    it('should extract domain from https URL', () => {
+    it('https URLからドメインを抽出できること', () => {
       expect(extractDomain('https://example.com/path')).toBe('example.com');
     });
 
-    it('should extract domain from http URL', () => {
+    it('http URLからドメインを抽出できること', () => {
       expect(extractDomain('http://example.com/path')).toBe('example.com');
     });
 
-    it('should extract domain from URL with subdomain', () => {
+    it('サブドメイン付きURLからドメインを抽出できること', () => {
       expect(extractDomain('https://sub.example.com/path')).toBe('sub.example.com');
     });
 
-    it('should extract domain from URL with port', () => {
+    it('ポート付きURLからドメインを抽出できること', () => {
       expect(extractDomain('https://example.com:8080/path')).toBe('example.com');
     });
 
-    it('should return null for invalid URL', () => {
+    it('無効なURLのnullを返すこと', () => {
       expect(extractDomain('not-a-url')).toBeNull();
     });
 
-    it('should return null for undefined URL', () => {
+    it('undefined URLのnullを返すこと', () => {
       expect(extractDomain(undefined)).toBeNull();
     });
 
-    it('should return null for chrome:// URLs', () => {
+    it('chrome://URLのnullを返すこと', () => {
       expect(extractDomain('chrome://settings')).toBeNull();
     });
 
-    it('should return null for chrome-extension:// URLs', () => {
+    it('chrome-extension://URLのnullを返すこと', () => {
       expect(extractDomain('chrome-extension://abc123/popup.html')).toBeNull();
     });
   });
 
   describe('isValidDomain', () => {
-    it('should return true for valid domain', () => {
+    it('有効なドメインにtrueを返すこと', () => {
       expect(isValidDomain('example.com')).toBe(true);
     });
 
-    it('should return true for subdomain', () => {
+    it('サブドメインにtrueを返すこと', () => {
       expect(isValidDomain('sub.example.com')).toBe(true);
     });
 
-    it('should return false for empty string', () => {
+    it('空文字列にfalseを返すこと', () => {
       expect(isValidDomain('')).toBe(false);
     });
 
-    it('should return false for null', () => {
+    it('nullにfalseを返すこと', () => {
       expect(isValidDomain(null)).toBe(false);
     });
 
-    it('should return false for undefined', () => {
+    it('undefinedにfalseを返すこと', () => {
       expect(isValidDomain(undefined)).toBe(false);
     });
 
-    it('should return false for domain with spaces', () => {
+    it('スペースを含むドメインにfalseを返すこと', () => {
       expect(isValidDomain('example .com')).toBe(false);
     });
 
-    it('should return false for invalid characters', () => {
+    it('無効な文字を含むドメインにfalseを返すこと', () => {
       expect(isValidDomain('example@.com')).toBe(false);
     });
   });
@@ -71,7 +71,7 @@ describe('Domain Utils', () => {
       vi.clearAllMocks();
     });
 
-    it('should find tabs by domain', async () => {
+    it('ドメインでタブを検索できること', async () => {
       const mockTabs = [
         { id: 1, url: 'https://example.com/page1', windowId: 1 },
         { id: 2, url: 'https://example.com/page2', windowId: 1 },
@@ -87,7 +87,7 @@ describe('Domain Utils', () => {
       expect(result[1].id).toBe(2);
     });
 
-    it('should return empty array when no tabs match domain', async () => {
+    it('ドメインに一致するタブがない場合は空配列を返すこと', async () => {
       const mockTabs = [
         { id: 1, url: 'https://other.com/page1', windowId: 1 }
       ];
@@ -99,7 +99,7 @@ describe('Domain Utils', () => {
       expect(result).toHaveLength(0);
     });
 
-    it('should handle tabs without URL', async () => {
+    it('URLのないタブを適切に処理できること', async () => {
       const mockTabs = [
         { id: 1, windowId: 1 }, // No URL
         { id: 2, url: 'https://example.com/page1', windowId: 1 }
@@ -113,7 +113,7 @@ describe('Domain Utils', () => {
       expect(result[0].id).toBe(2);
     });
 
-    it('should filter by windowId when provided', async () => {
+    it('windowIdが指定された場合にフィルタリングできること', async () => {
       const mockTabsWindow1 = [
         { id: 1, url: 'https://example.com/page1', windowId: 1 }
       ];
@@ -127,7 +127,7 @@ describe('Domain Utils', () => {
       expect(chrome.tabs.query).toHaveBeenCalledWith({ windowId: 1 });
     });
 
-    it('should query all windows when windowId not provided', async () => {
+    it('windowIdが指定されない場合は全ウィンドウを検索すること', async () => {
       const mockTabs = [
         { id: 1, url: 'https://example.com/page1', windowId: 1 }
       ];

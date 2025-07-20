@@ -12,13 +12,13 @@ const mockFindGroupByDomain = vi.mocked(findGroupByDomain);
 const mockCreateGroupForDomain = vi.mocked(createGroupForDomain);
 const mockAddTabToGroup = vi.mocked(addTabToGroup);
 
-describe('Tab Created Handler', () => {
+describe('タブ作成ハンドラーテスト', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   describe('handleTabCreated', () => {
-    it('should group tab when domain is valid and group exists', async () => {
+    it('ドメインが有効でグループが存在する場合にタブをグループ化できること', async () => {
       const mockTab = {
         id: 123,
         url: 'https://example.com/page',
@@ -46,7 +46,7 @@ describe('Tab Created Handler', () => {
       expect(mockCreateGroupForDomain).not.toHaveBeenCalled();
     });
 
-    it('should create new group when domain is valid but no group exists', async () => {
+    it('ドメインが有効でグループが存在しない場合に新しいグループを作成できること', async () => {
       const mockTab = {
         id: 123,
         url: 'https://example.com/page',
@@ -75,7 +75,7 @@ describe('Tab Created Handler', () => {
       expect(mockAddTabToGroup).toHaveBeenCalledWith(123, 2);
     });
 
-    it('should skip grouping when domain extraction fails', async () => {
+    it('ドメイン抽出が失敗した場合にグループ化をスキップできること', async () => {
       const mockTab = {
         id: 123,
         url: 'chrome://settings',
@@ -92,7 +92,7 @@ describe('Tab Created Handler', () => {
       expect(mockAddTabToGroup).not.toHaveBeenCalled();
     });
 
-    it('should skip grouping when tab has no URL', async () => {
+    it('タブにURLがない場合にグループ化をスキップできること', async () => {
       const mockTab = {
         id: 123,
         windowId: 1
@@ -106,7 +106,7 @@ describe('Tab Created Handler', () => {
       expect(mockAddTabToGroup).not.toHaveBeenCalled();
     });
 
-    it('should skip grouping when tab has no ID', async () => {
+    it('タブにIDがない場合にグループ化をスキップできること', async () => {
       const mockTab = {
         url: 'https://example.com/page',
         windowId: 1
@@ -120,7 +120,7 @@ describe('Tab Created Handler', () => {
       expect(mockAddTabToGroup).not.toHaveBeenCalled();
     });
 
-    it('should handle group creation failure gracefully', async () => {
+    it('グループ作成失敗を適切に処理できること', async () => {
       const mockTab = {
         id: 123,
         url: 'https://example.com/page',
@@ -137,7 +137,7 @@ describe('Tab Created Handler', () => {
       expect(mockAddTabToGroup).not.toHaveBeenCalled();
     });
 
-    it('should handle add tab to group failure gracefully', async () => {
+    it('タブグループ追加失敗を適切に処理できること', async () => {
       const mockTab = {
         id: 123,
         url: 'https://example.com/page',
@@ -163,7 +163,7 @@ describe('Tab Created Handler', () => {
       // Should not throw error, just log it
     });
 
-    it('should skip grouping when tab is already in a group', async () => {
+    it('タブが既にグループに所属している場合にグループ化をスキップできること', async () => {
       const mockTab = {
         id: 123,
         url: 'https://example.com/page',
@@ -179,7 +179,7 @@ describe('Tab Created Handler', () => {
       expect(mockAddTabToGroup).not.toHaveBeenCalled();
     });
 
-    it('should process tab when groupId is TAB_GROUP_ID_NONE', async () => {
+    it('groupIdがTAB_GROUP_ID_NONEの場合にタブを処理できること', async () => {
       const mockTab = {
         id: 123,
         url: 'https://example.com/page',

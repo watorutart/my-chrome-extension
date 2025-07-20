@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import type { TabInfo, GroupInfo, DomainGroup, GroupingConfig } from '../src/types';
 
-describe('Types', () => {
-  describe('TabInfo interface', () => {
-    it('should accept valid TabInfo object', () => {
+describe('型定義テスト', () => {
+  describe('TabInfoインターフェース', () => {
+    it('有効なTabInfoオブジェクトを受け入れること', () => {
       const tabInfo: TabInfo = {
         id: 1,
         url: 'https://example.com',
@@ -18,7 +18,7 @@ describe('Types', () => {
       expect(tabInfo.domain).toBe('example.com');
     });
 
-    it('should accept TabInfo with required fields only', () => {
+    it('必須フィールドのみTabInfoを受け入れること', () => {
       const tabInfo: TabInfo = {
         id: 1,
         windowId: 1
@@ -30,8 +30,8 @@ describe('Types', () => {
     });
   });
 
-  describe('GroupInfo interface', () => {
-    it('should accept valid GroupInfo object', () => {
+  describe('GroupInfoインターフェース', () => {
+    it('有効なGroupInfoオブジェクトを受け入れること', () => {
       const groupInfo: GroupInfo = {
         id: 1,
         title: 'Test Group',
@@ -46,7 +46,7 @@ describe('Types', () => {
       expect(groupInfo.collapsed).toBe(false);
     });
 
-    it('should accept GroupInfo with required fields only', () => {
+    it('必須フィールドのみGroupInfoを受け入れること', () => {
       const groupInfo: GroupInfo = {
         id: 1,
         color: 'red',
@@ -60,8 +60,8 @@ describe('Types', () => {
     });
   });
 
-  describe('DomainGroup interface', () => {
-    it('should accept valid DomainGroup object', () => {
+  describe('DomainGroupインターフェース', () => {
+    it('有効なDomainGroupオブジェクトを受け入れること', () => {
       const domainGroup: DomainGroup = {
         domain: 'example.com',
         groupId: 1,
@@ -73,7 +73,7 @@ describe('Types', () => {
       expect(domainGroup.tabIds).toHaveLength(3);
     });
 
-    it('should accept DomainGroup without groupId', () => {
+    it('groupIdなしのDomainGroupを受け入れること', () => {
       const domainGroup: DomainGroup = {
         domain: 'example.com',
         tabIds: [1, 2]
@@ -85,8 +85,8 @@ describe('Types', () => {
     });
   });
 
-  describe('GroupingConfig interface', () => {
-    it('should accept valid GroupingConfig object', () => {
+  describe('GroupingConfigインターフェース', () => {
+    it('有効なGroupingConfigオブジェクトを受け入れること', () => {
       const config: GroupingConfig = {
         autoGroupPrefix: '[Test]',
         ignoredUrlPatterns: ['chrome://'],
