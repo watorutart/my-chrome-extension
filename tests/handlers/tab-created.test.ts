@@ -120,7 +120,7 @@ describe('タブ作成ハンドラーテスト', () => {
       expect(mockAddTabToGroup).not.toHaveBeenCalled();
     });
 
-    it('グループ作成失敗を適切に処理できること', async () => {
+    it('グループ作成失敗時にタブ追加をスキップすること', async () => {
       const mockTab = {
         id: 123,
         url: 'https://example.com/page',
@@ -137,7 +137,7 @@ describe('タブ作成ハンドラーテスト', () => {
       expect(mockAddTabToGroup).not.toHaveBeenCalled();
     });
 
-    it('タブグループ追加失敗を適切に処理できること', async () => {
+    it('タブグループ追加失敗時にエラーをログ出力すること', async () => {
       const mockTab = {
         id: 123,
         url: 'https://example.com/page',
