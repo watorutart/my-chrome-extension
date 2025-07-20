@@ -1,14 +1,14 @@
-# Icons
+# アイコン
 
-This directory should contain the following icon files for the Chrome extension:
+このディレクトリには、Chrome拡張機能用の以下のアイコンファイルを配置してください：
 
-- icon16.png (16x16 pixels)
-- icon48.png (48x48 pixels)  
-- icon128.png (128x128 pixels)
+- icon16.png (16x16ピクセル)
+- icon48.png (48x48ピクセル)  
+- icon128.png (128x128ピクセル)
 
-These icons will be displayed in:
-- icon16.png: Extension toolbar
-- icon48.png: Extension management page
-- icon128.png: Chrome Web Store
+これらのアイコンは以下の場所で表示されます：
+- icon16.png: 拡張機能ツールバー
+- icon48.png: 拡張機能管理ページ
+- icon128.png: Chrome ウェブストア
 
-For now, you can create simple placeholder images or use any suitable icons for tab grouping functionality.
+現在は、シンプルなプレースホルダー画像を作成するか、タブグループ化機能に適したアイコンをご使用ください。
