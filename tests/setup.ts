@@ -24,6 +24,7 @@ const mockChrome = {
   },
   tabGroups: {
     query: vi.fn(),
+    get: vi.fn(),
     create: vi.fn(),
     update: vi.fn(),
     move: vi.fn(),
