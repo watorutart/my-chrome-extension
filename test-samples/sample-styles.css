@@ -15,8 +15,8 @@
 
 /* 問題3: アクセシビリティの考慮不足 */
 .hidden-text {
-    color: #555;
-    background-color: #ddd;
+    color: #333;
+    background-color: #f5f5f5;
 }
 
 /* 問題4: 保守性の低いカラーコード */
