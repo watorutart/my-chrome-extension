@@ -60,7 +60,7 @@ function calculateAge(birthDate) {
 
 // 問題7: セキュリティ上の懸念（innerHTML使用）
 function displayMessage(message) {
-    document.getElementById('message').innerHTML = message;
+    document.getElementById('message').textContent = message;
 }
 
 // 期待される日本語レビューコメント例：
