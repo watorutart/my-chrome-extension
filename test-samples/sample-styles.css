@@ -14,7 +14,7 @@
 
 /* 問題3: アクセシビリティの考慮不足 */
 .hidden-text {
-    color: #ccc;
+    color: #555;
     background-color: #ddd;
 }
 
