@@ -5,7 +5,7 @@ import {
   MAX_GROUP_SIZE,
   DEFAULT_GROUP_COLORS,
   GROUPING_CONFIG
-} from '../src/constants';
+} from '../constants';
 
 describe('定数テスト', () => {
   describe('AUTO_GROUP_PREFIX', () => {

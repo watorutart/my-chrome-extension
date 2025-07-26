@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { handleTabCreated } from '../../src/handlers/tab-created';
-import { extractDomain } from '../../src/utils/domain';
-import { findGroupByDomain, createGroupForDomain, addTabToGroup } from '../../src/utils/group';
+import { handleTabCreated } from '../tab-created';
+import { extractDomain } from '../../utils/domain';
+import { findGroupByDomain, createGroupForDomain, addTabToGroup } from '../../utils/group';
 
 // Mock the utility functions
-vi.mock('../../src/utils/domain');
-vi.mock('../../src/utils/group');
+vi.mock('../../utils/domain');
+vi.mock('../../utils/group');
 
 const mockExtractDomain = vi.mocked(extractDomain);
 const mockFindGroupByDomain = vi.mocked(findGroupByDomain);

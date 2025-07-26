@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi, beforeEach } from 'vitest';
 
 // Chrome API mock setup
 const mockChrome = {
@@ -52,7 +52,7 @@ const mockChrome = {
 };
 
 // Global chrome object for tests
-(global as any).chrome = mockChrome;
+(globalThis as any).chrome = mockChrome;
 
 // Reset all mocks before each test
 beforeEach(() => {

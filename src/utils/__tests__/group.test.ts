@@ -4,8 +4,8 @@ import {
   findGroupByDomain,
   createGroupForDomain,
   addTabToGroup
-} from '../../src/utils/group';
-import { AUTO_GROUP_PREFIX } from '../../src/constants';
+} from '../group';
+import { AUTO_GROUP_PREFIX } from '../../constants';
 
 describe('グループユーティリティテスト', () => {
   beforeEach(() => {

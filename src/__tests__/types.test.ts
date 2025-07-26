@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { TabInfo, GroupInfo, DomainGroup, GroupingConfig } from '../src/types';
+import type { TabInfo, GroupInfo, DomainGroup, GroupingConfig } from '../types';
 
 describe('型定義テスト', () => {
   describe('TabInfoインターフェース', () => {

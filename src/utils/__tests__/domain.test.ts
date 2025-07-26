@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { extractDomain, isValidDomain, findTabsByDomain } from '../../src/utils/domain';
+import { extractDomain, isValidDomain, findTabsByDomain } from '../domain';
 
 describe('ドメインユーティリティテスト', () => {
   describe('extractDomain', () => {
