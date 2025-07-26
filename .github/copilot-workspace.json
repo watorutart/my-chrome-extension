@@ -1,0 +1,34 @@
+{
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false
+  },
+  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.chat.localeOverride": "ja",
+  "github.copilot.preferences": {
+    "locale": "ja-JP",
+    "reviewLanguage": "japanese"
+  },
+  "github.copilot.advanced": {
+    "customPrompts": {
+      "codeReview": "Please provide all code review comments in Japanese. Include detailed explanations for technical terms and provide specific, constructive suggestions for improvements. Use polite, professional Japanese suitable for business communication.",
+      "codeExplanation": "コードの説明は日本語で行い、技術用語には必要に応じて英語を併記してください。初心者にも理解しやすい丁寧な説明を心がけてください。",
+      "codeImprovement": "コードの改善提案は日本語で具体的に説明し、なぜその改善が必要なのかを含めて記述してください。可能であれば改善後のコード例も提示してください。"
+    },
+    "reviewRules": {
+      "language": "ja",
+      "style": "professional",
+      "detailLevel": "comprehensive",
+      "includeExamples": true,
+      "focusAreas": [
+        "コードの可読性",
+        "保守性の向上", 
+        "パフォーマンス最適化",
+        "セキュリティ強化",
+        "ベストプラクティス遵守"
+      ]
+    }
+  }
+}
