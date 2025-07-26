@@ -45,10 +45,10 @@
 }
 
 /* 問題6: !importantの乱用 */
-.urgent-message {
-    color: red !important;
-    font-size: 18px !important;
-    background-color: yellow !important;
+.notification .urgent-message {
+    color: red;
+    font-size: 18px;
+    background-color: yellow;
 }
 
 /* 問題7: パフォーマンスに影響するセレクタ */
