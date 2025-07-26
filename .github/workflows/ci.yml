@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop, 'feature/**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Run linter
+      run: pnpm lint
+
+    - name: Run type check
+      run: npx tsc --noEmit
+
+    - name: Run tests
+      run: pnpm test
+
+    - name: Run tests with coverage
+      run: pnpm test:coverage
+
+    - name: Upload coverage reports to Codecov
+      if: matrix.node-version == '20.x'
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage/lcov.info
+        fail_ci_if_error: false
+
+    - name: Build extension
+      run: pnpm build
+
+    - name: Upload build artifacts
+      if: matrix.node-version == '20.x'
+      uses: actions/upload-artifact@v4
+      with:
+        name: extension-build
+        path: dist/
+        retention-days: 7
+
+  build-test:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Build for production
+      run: pnpm build
+
+    - name: Validate manifest
+      run: |
+        if [ ! -f dist/manifest.json ]; then
+          echo "❌ manifest.json not found in dist/"
+          exit 1
+        fi
+        echo "✅ manifest.json exists"
+
+    - name: Validate build output
+      run: |
+        if [ ! -f dist/background.js ]; then
+          echo "❌ background.js not found in dist/"
+          exit 1
+        fi
+        if [ ! -d dist/icons ]; then
+          echo "❌ icons directory not found in dist/"
+          exit 1
+        fi
+        echo "✅ All required build files exist"
+
+    - name: Check bundle size
+      run: |
+        BUNDLE_SIZE=$(wc -c < dist/background.js)
+        echo "Bundle size: $BUNDLE_SIZE bytes"
+        if [ $BUNDLE_SIZE -gt 1048576 ]; then
+          echo "⚠️ Bundle size is larger than 1MB"
+        else
+          echo "✅ Bundle size is acceptable"
+        fi

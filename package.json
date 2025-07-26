@@ -1,0 +1,39 @@
+{
+  "name": "chrome-tab-auto-grouping",
+  "version": "1.0.0",
+  "description": "Chrome extension for automatic tab grouping by domain",
+  "type": "module",
+  "scripts": {
+    "dev": "esbuild src/background.ts --bundle --outfile=dist/background.js --format=esm --target=es2022 --watch",
+    "build": "esbuild src/background.ts --bundle --outfile=dist/background.js --format=esm --target=es2022 --minify && npm run copy:files",
+    "copy:files": "cp manifest.json dist/ && mkdir -p dist/icons && cp -r icons/* dist/icons/ 2>/dev/null || true",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint src --ext .ts,.js",
+    "lint:fix": "eslint src --ext .ts,.js --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "chrome-extension",
+    "tab-management",
+    "auto-grouping"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chrome": "^0.0.258",
+    "@types/node": "^20.11.17",
+    "@eslint/js": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vitest/coverage-v8": "^1.2.2",
+    "@vitest/ui": "^1.2.2",
+    "esbuild": "^0.20.0",
+    "eslint": "^8.56.0",
+    "jsdom": "^24.1.3",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
+  },
+  "packageManager": "pnpm@9.15.0"
+}
