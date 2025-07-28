@@ -123,9 +123,10 @@ describe('エラーハンドリングユーティリティテスト', () => {
       expect(mockTabsGet).not.toHaveBeenCalled();
     });
 
-    it('タブにURLがない場合にfalseを返すこと', async () => {
+    it('タブIDが一致しない場合にfalseを返すこと', async () => {
       const mockTab = {
-        id: 123,
+        id: 456, // 要求されたIDと異なる
+        url: 'https://example.com',
         windowId: 1,
         groupId: chrome.tabGroups.TAB_GROUP_ID_NONE
       } as chrome.tabs.Tab;
