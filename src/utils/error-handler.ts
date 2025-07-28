@@ -36,7 +36,7 @@ export async function validateTabState(tabId: number): Promise<boolean> {
     const tab = await chrome.tabs.get(tabId);
     
     // タブの基本プロパティを検証
-    if (!tab || !tab.url || tab.id === undefined) {
+    if (!tab || tab.id !== tabId) {
       return false;
     }
 
