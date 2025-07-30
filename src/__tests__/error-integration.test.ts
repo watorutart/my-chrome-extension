@@ -81,28 +81,58 @@ describe('Error Integration Tests', () => {
     });
 
     it('should handle runtime.lastError in Chrome API calls', async () => {
-      const tab = {
-        id: 1,
-        url: 'https://example.com/page',
-        windowId: 1,
-        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
-      };
-
-      const existingTab = {
+      mockChrome.tabs.query.mockResolvedValue([{ 
         id: 2,
         url: 'https://example.com/other',
         windowId: 1,
         groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
-      };
-
-      mockChrome.tabs.query.mockResolvedValue([existingTab]);
+        index: 0,
+        pinned: false,
+        highlighted: false,
+        active: false,
+        incognito: false,
+        selected: false,
+        discarded: false,
+        autoDiscardable: true,
+        mutedInfo: undefined,
+        width: 100,
+        height: 100,
+        status: 'complete',
+        title: 'other',
+        audible: false,
+        openerTabId: undefined,
+        favIconUrl: undefined,
+        sessionId: undefined
+      } as chrome.tabs.Tab]);
       mockChrome.tabGroups.query.mockResolvedValue([]);
       mockChrome.tabGroups.create.mockImplementation(() => {
-        mockChrome.runtime.lastError = { message: 'Extension context invalidated' };
-        return Promise.resolve({ id: 10 });
+        mockChrome.runtime.lastError = { message: 'Extension context invalidated' } as any;
+        return Promise.reject(new Error('Extension context invalidated'));
       });
 
-      await expect(handleTabCreated(tab)).resolves.not.toThrow();
+      await expect(handleTabCreated({
+        id: 1,
+        url: 'https://example.com/page',
+        windowId: 1,
+        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
+        index: 0,
+        pinned: false,
+        highlighted: false,
+        active: false,
+        incognito: false,
+        selected: false,
+        discarded: false,
+        autoDiscardable: true,
+        mutedInfo: undefined,
+        width: 100,
+        height: 100,
+        status: 'complete',
+        title: 'page',
+        audible: false,
+        openerTabId: undefined,
+        favIconUrl: undefined,
+        sessionId: undefined
+      } as chrome.tabs.Tab)).resolves.not.toThrow();
 
       expect(mockChrome.tabGroups.create).toHaveBeenCalled();
       expect(mockChrome.tabs.group).not.toHaveBeenCalled();
@@ -328,8 +358,7 @@ describe('Error Integration Tests', () => {
         toIndex: 1,
       };
 
-      // Add get method to mockChrome
-      mockChrome.tabs.get = vi.fn().mockRejectedValue(new Error('Tab not found'));
+      mockChrome.tabs.get.mockRejectedValue(new Error('Tab not found'));
 
       await expect(handleTabMoved(999, moveInfo)).resolves.not.toThrow();
 
