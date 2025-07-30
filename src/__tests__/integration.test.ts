@@ -59,7 +59,6 @@ describe('Integration Tests - Complete Flows', () => {
         .mockResolvedValueOnce([existingTab, newTab]); // tabs in window for group creation
       
       mockChrome.tabGroups.query.mockResolvedValue([]);
-      mockChrome.tabs.group.mockResolvedValue(10); // Returns groupId
       mockChrome.tabGroups.update.mockResolvedValue({ 
         id: 10, 
         title: '[AUTO] example.com',
@@ -277,7 +276,7 @@ describe('Integration Tests - Complete Flows', () => {
         windowId: 2,
       });
       expect(mockChrome.tabGroups.update).toHaveBeenCalledWith(40, {
-        title: 'newdomain.com',
+        title: '[AUTO] newdomain.com',
         color: 'blue',
       });
       expect(mockChrome.tabs.group).toHaveBeenCalledWith({
