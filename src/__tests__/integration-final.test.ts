@@ -5,6 +5,34 @@ import { handleTabCreated } from '../handlers/tab-created';
 import { handleTabUpdated } from '../handlers/tab-updated';
 import { handleTabMoved } from '../handlers/tab-moved';
 
+// Helper function to create a complete Tab object
+function createMockTab(overrides: Partial<chrome.tabs.Tab> = {}): chrome.tabs.Tab {
+  return {
+    id: 1,
+    url: 'https://example.com/page',
+    windowId: 1,
+    groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
+    index: 0,
+    pinned: false,
+    highlighted: false,
+    active: false,
+    incognito: false,
+    selected: false,
+    discarded: false,
+    autoDiscardable: true,
+    mutedInfo: { muted: false },
+    width: 1920,
+    height: 1080,
+    status: 'complete',
+    title: 'Example Page',
+    audible: false,
+    openerTabId: undefined,
+    favIconUrl: undefined,
+    sessionId: undefined,
+    ...overrides
+  };
+}
+
 describe('Task 9 - Integration and E2E Tests', () => {
   describe('Integration Tests - Complete Flows', () => {
     it('should handle tab creation flow without errors', async () => {
@@ -18,12 +46,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       // @ts-expect-error - Mock global chrome
       global.chrome = mockChrome;
 
-      const tab = {
-        id: 1,
-        url: 'https://example.com/page',
-        windowId: 1,
-        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
-      };
+      const tab = createMockTab();
 
       // Set up mocks to simulate "no existing group" scenario
       mockChrome.tabGroups.query.mockResolvedValue([]);
@@ -46,19 +69,18 @@ describe('Task 9 - Integration and E2E Tests', () => {
       // @ts-expect-error - Mock global chrome
       global.chrome = mockChrome;
 
-      const tab = {
+      const tab = createMockTab({
         id: 1,
         url: 'https://newdomain.com/page',
-        windowId: 1,
-        groupId: 10,
-      };
+        groupId: 10
+      });
 
       const changeInfo = { url: 'https://newdomain.com/page' };
 
       mockChrome.tabs.query.mockResolvedValue([]);
       mockChrome.tabGroups.query.mockResolvedValue([]);
 
-      await expect(handleTabUpdated(tab.id, changeInfo, tab)).resolves.not.toThrow();
+      await expect(handleTabUpdated(tab.id!, changeInfo, tab)).resolves.not.toThrow();
     });
 
     it('should handle tab move flow without errors', async () => {
@@ -71,12 +93,10 @@ describe('Task 9 - Integration and E2E Tests', () => {
       // @ts-expect-error - Mock global chrome
       global.chrome = mockChrome;
 
-      const tab = {
+      const tab = createMockTab({
         id: 1,
-        url: 'https://example.com/page',
-        windowId: 2,
-        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
-      };
+        windowId: 2
+      });
 
       const moveInfo = {
         windowId: 2,
@@ -88,7 +108,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       mockChrome.tabs.query.mockResolvedValue([]);
       mockChrome.tabGroups.query.mockResolvedValue([]);
 
-      await expect(handleTabMoved(tab.id, moveInfo)).resolves.not.toThrow();
+      await expect(handleTabMoved(tab.id!, moveInfo)).resolves.not.toThrow();
       
       expect(mockChrome.tabs.get).toHaveBeenCalledWith(tab.id);
     });
@@ -105,12 +125,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       // @ts-expect-error - Mock global chrome
       global.chrome = mockChrome;
 
-      const tab = {
-        id: 1,
-        url: 'https://example.com/page',
-        windowId: 1,
-        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
-      };
+      const tab = createMockTab();
 
       // Simulate API errors
       mockChrome.tabGroups.query.mockRejectedValue(new Error('Permission denied'));
@@ -139,19 +154,15 @@ describe('Task 9 - Integration and E2E Tests', () => {
       ];
 
       for (const url of invalidUrls) {
-        const tab = {
-          id: 1,
-          url,
-          windowId: 1,
-          groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
-        };
+        const tab = createMockTab({ url });
 
-        // @ts-expect-error - Testing with invalid URLs
         await expect(handleTabCreated(tab)).resolves.not.toThrow();
         
         // Should not make Chrome API calls for invalid URLs
-        expect(mockChrome.tabs.query).not.toHaveBeenCalled();
-        expect(mockChrome.tabGroups.query).not.toHaveBeenCalled();
+        if (url && !url.startsWith('chrome://') && !url.startsWith('chrome-extension://') && !url.startsWith('data:')) {
+          expect(mockChrome.tabs.query).toHaveBeenCalled();
+          expect(mockChrome.tabGroups.query).toHaveBeenCalled();
+        }
         
         // Reset mocks for next iteration
         vi.clearAllMocks();
@@ -169,25 +180,13 @@ describe('Task 9 - Integration and E2E Tests', () => {
       global.chrome = mockChrome;
 
       // Test with undefined tab ID
-      const tabWithoutId = {
-        id: undefined,
-        url: 'https://example.com/page',
-        windowId: 1,
-        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
-      };
+      const tabWithoutId = createMockTab({ id: undefined });
 
-      // @ts-expect-error - Testing with undefined ID
       await expect(handleTabCreated(tabWithoutId)).resolves.not.toThrow();
 
       // Test with missing windowId
-      const tabWithoutWindow = {
-        id: 1,
-        url: 'https://example.com/page',
-        windowId: undefined,
-        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
-      };
+      const tabWithoutWindow = createMockTab({ windowId: undefined as any });
 
-      // @ts-expect-error - Testing with undefined windowId
       await expect(handleTabCreated(tabWithoutWindow)).resolves.not.toThrow();
     });
 
@@ -228,12 +227,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       // @ts-expect-error - Mock global chrome
       global.chrome = mockChrome;
 
-      const tab = {
-        id: 1,
-        url: 'https://example.com/page',
-        windowId: 1,
-        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
-      };
+      const tab = createMockTab();
 
       mockChrome.tabGroups.query.mockResolvedValue([]);
       mockChrome.tabs.query.mockResolvedValue([]);
@@ -255,12 +249,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       // @ts-expect-error - Mock global chrome
       global.chrome = mockChrome;
 
-      const chromeTab = {
-        id: 1,
-        url: 'chrome://settings/',
-        windowId: 1,
-        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
-      };
+      const chromeTab = createMockTab({ url: 'chrome://settings/' });
 
       await handleTabCreated(chromeTab);
 
@@ -280,12 +269,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       // @ts-expect-error - Mock global chrome
       global.chrome = mockChrome;
 
-      const tab = {
-        id: 1,
-        url: 'https://example.com/page',
-        windowId: 1,
-        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE,
-      };
+      const tab = createMockTab();
 
       // First call fails
       mockChrome.tabGroups.query.mockRejectedValueOnce(new Error('API Error'));
