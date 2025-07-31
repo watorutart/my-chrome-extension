@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "es2022": true,
-    "webextensions": true
+    "webextensions": true,
+    "node": true
   },
   "extends": [
     "eslint:recommended"
@@ -20,6 +21,20 @@
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
   },
   "globals": {
-    "chrome": "readonly"
-  }
+    "chrome": "readonly",
+    "global": "writable"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.test.ts", "**/__tests__/**/*.ts"],
+      "env": {
+        "jest": true,
+        "node": true
+      },
+      "globals": {
+        "global": "writable",
+        "vi": "readonly"
+      }
+    }
+  ]
 }

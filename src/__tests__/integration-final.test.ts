@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 // Import handlers directly
 import { handleTabCreated } from '../handlers/tab-created';
