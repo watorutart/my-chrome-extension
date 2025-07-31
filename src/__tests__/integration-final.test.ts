@@ -33,9 +33,9 @@ function createMockTab(overrides: Partial<chrome.tabs.Tab> = {}): chrome.tabs.Ta
   };
 }
 
-describe('Task 9 - Integration and E2E Tests', () => {
-  describe('Integration Tests - Complete Flows', () => {
-    it('should handle tab creation flow without errors', async () => {
+describe('タスク9 - 統合テストとE2Eテスト', () => {
+  describe('統合テスト - 完全なフロー', () => {
+    it('エラーなしでタブ作成フローを処理できること', async () => {
       // Mock Chrome APIs completely to avoid permission issues
       const mockChrome = {
         tabs: { query: vi.fn(), group: vi.fn(), ungroup: vi.fn(), get: vi.fn() },
@@ -59,7 +59,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       expect(mockChrome.tabGroups.query).toHaveBeenCalled();
     });
 
-    it('should handle tab update flow without errors', async () => {
+    it('エラーなしでタブ更新フローを処理できること', async () => {
       const mockChrome = {
         tabs: { query: vi.fn(), group: vi.fn(), ungroup: vi.fn(), get: vi.fn() },
         tabGroups: { query: vi.fn(), create: vi.fn(), update: vi.fn(), TAB_GROUP_ID_NONE: -1 },
@@ -83,7 +83,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       await expect(handleTabUpdated(tab.id!, changeInfo, tab)).resolves.not.toThrow();
     });
 
-    it('should handle tab move flow without errors', async () => {
+    it('エラーなしでタブ移動フローを処理できること', async () => {
       const mockChrome = {
         tabs: { query: vi.fn(), group: vi.fn(), ungroup: vi.fn(), get: vi.fn() },
         tabGroups: { query: vi.fn(), create: vi.fn(), update: vi.fn(), TAB_GROUP_ID_NONE: -1 },
@@ -114,8 +114,8 @@ describe('Task 9 - Integration and E2E Tests', () => {
     });
   });
 
-  describe('Error Cases Integration Tests', () => {
-    it('should handle Chrome API errors gracefully', async () => {
+  describe('エラーケース統合テスト', () => {
+    it('Chrome APIエラーを適切に処理できること', async () => {
       const mockChrome = {
         tabs: { query: vi.fn(), group: vi.fn(), ungroup: vi.fn(), get: vi.fn() },
         tabGroups: { query: vi.fn(), create: vi.fn(), update: vi.fn(), TAB_GROUP_ID_NONE: -1 },
@@ -135,7 +135,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       await expect(handleTabCreated(tab)).resolves.not.toThrow();
     });
 
-    it('should ignore invalid URLs', async () => {
+    it('無効なURLを無視できること', async () => {
       const mockChrome = {
         tabs: { query: vi.fn(), group: vi.fn(), ungroup: vi.fn(), get: vi.fn() },
         tabGroups: { query: vi.fn(), create: vi.fn(), update: vi.fn(), TAB_GROUP_ID_NONE: -1 },
@@ -169,7 +169,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       }
     });
 
-    it('should handle missing tab data gracefully', async () => {
+    it('タブデータの不足を適切に処理できること', async () => {
       const mockChrome = {
         tabs: { query: vi.fn(), group: vi.fn(), ungroup: vi.fn(), get: vi.fn() },
         tabGroups: { query: vi.fn(), create: vi.fn(), update: vi.fn(), TAB_GROUP_ID_NONE: -1 },
@@ -190,7 +190,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       await expect(handleTabCreated(tabWithoutWindow)).resolves.not.toThrow();
     });
 
-    it('should handle tab move with invalid tab ID', async () => {
+    it('無効なタブIDでのタブ移動を処理できること', async () => {
       const mockChrome = {
         tabs: { query: vi.fn(), group: vi.fn(), ungroup: vi.fn(), get: vi.fn() },
         tabGroups: { query: vi.fn(), create: vi.fn(), update: vi.fn(), TAB_GROUP_ID_NONE: -1 },
@@ -215,8 +215,8 @@ describe('Task 9 - Integration and E2E Tests', () => {
     });
   });
 
-  describe('Requirements Validation', () => {
-    it('validates requirement 1.1: Domain-based grouping capability', async () => {
+  describe('要件検証', () => {
+    it('ドメインベースのグループ化が動作することを確認', async () => {
       // This test validates that the system can process domain-based grouping requests
       const mockChrome = {
         tabs: { query: vi.fn(), group: vi.fn(), ungroup: vi.fn(), get: vi.fn() },
@@ -238,7 +238,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       expect(mockChrome.tabGroups.query).toHaveBeenCalled();
     });
 
-    it('validates requirement 4.1: Invalid domain handling', async () => {
+    it('chrome://URLなどの無効なドメインを適切に無視することを確認', async () => {
       // This test validates that chrome:// URLs are ignored
       const mockChrome = {
         tabs: { query: vi.fn(), group: vi.fn(), ungroup: vi.fn(), get: vi.fn() },
@@ -258,7 +258,7 @@ describe('Task 9 - Integration and E2E Tests', () => {
       expect(mockChrome.tabs.query).not.toHaveBeenCalled();
     });
 
-    it('validates requirement 4.3: Error resilience', async () => {
+    it('APIエラー発生後も拡張機能が正常に動作し続けることを確認', async () => {
       // This test validates that the extension continues to function after errors
       const mockChrome = {
         tabs: { query: vi.fn(), group: vi.fn(), ungroup: vi.fn(), get: vi.fn() },    
