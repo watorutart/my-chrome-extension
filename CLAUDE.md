@@ -1,3 +1,61 @@
+# CLAUDE.md
+
+このファイルはClaude Code (claude.ai/code) がこのリポジトリで作業する際のガイダンスを提供します。
+
+## プロジェクト概要
+
+ドメイン別にタブを自動的にグループ化するChrome拡張機能。TypeScript で構築され、Vitest でテストし、esbuild でコンパイルします。
+
+## 開発コマンド
+
+### ビルドと開発
+- `pnpm dev` - ウォッチモード付き開発ビルド
+- `pnpm build` - 本番ビルド（圧縮あり）
+- `pnpm copy:files` - manifest と icons を dist/ にコピー
+
+### テスト
+- `pnpm test` - Vitest で全テストを実行
+- `pnpm test:ui` - UI インターフェースでテストを実行
+- `pnpm test:coverage` - テストカバレッジレポートを生成
+
+### コード品質
+- `pnpm lint` - TypeScript ファイルをリント
+- `pnpm lint:fix` - リントエラーを自動修正
+- `pnpm type-check` - TypeScript 型チェック
+
+## アーキテクチャ
+
+### コア構造
+- `src/background.ts` - メインサービスワーカーエントリーポイント、Chrome API イベントリスナーを設定
+- `src/handlers/` - タブライフサイクル（作成、更新、移動）のイベントハンドラー
+- `src/utils/` - ドメイン抽出、グループ管理、エラーハンドリングのユーティリティモジュール
+- `src/types.ts` - タブとグループ管理のTypeScriptインターフェース
+
+### 主要コンポーネント
+- **イベントハンドラー**: `src/handlers/` 内の異なるタブイベント用のモジュラーハンドラー
+- **グループ管理**: `src/utils/group.ts` が自動グループ作成とタブ割り当てを処理
+- **ドメイン抽出**: `src/utils/domain.ts` がURLからドメインを抽出・検証
+- **エラーハンドリング**: `src/utils/error-handler.ts` がChrome APIエラー管理を提供
+- **URL検証**: `src/utils/url-validation.ts` が処理前にタブURLを検証
+
+### テスト戦略
+- テストはソースファイルと同じディレクトリの `__tests__/` に配置
+- Chrome API モック用にjsdom環境でVitestを使用
+- `src/__tests__/integration*.test.ts` に統合テスト
+- カバレッジはテストファイルとdist/を除外するよう設定
+
+### Chrome拡張機能固有事項
+- Manifest V3 サービスワーカーアーキテクチャ
+- `tabs` と `tabGroups` 権限が必要
+- 自動生成グループは一貫した命名: `[Auto]` プレフィックス
+- ドメインハッシュに基づく一貫した色割り当て
+
+## 重要な注意点
+- Chrome API操作前には必ずタブ/グループの状態を検証する
+- Chrome API呼び出しには `src/utils/error-handler.ts` のエラーハンドラーを使用
+- `src/types.ts` で定義されたTypeScriptインターフェースに従う
+- Chrome API相互作用は適切なモックでテストする
+
 # Claude Code Configuration
 
 ## Commit Message Rules
