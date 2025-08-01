@@ -7,7 +7,7 @@
     "dev": "pnpm run clean && esbuild src/background.ts --bundle --outfile=dist/background.js --format=esm --target=es2022 --watch --sourcemap",
     "build": "pnpm run clean && pnpm run type-check && pnpm run lint && esbuild src/background.ts --bundle --outfile=dist/background.js --format=esm --target=es2022 --minify --tree-shaking --drop:console --drop:debugger && pnpm run copy:files",
     "build:dev": "pnpm run clean && esbuild src/background.ts --bundle --outfile=dist/background.js --format=esm --target=es2022 --sourcemap && pnpm run copy:files",
-    "clean": "node -e \"const fs=require('fs');fs.rmSync('dist',{recursive:true,force:true});fs.mkdirSync('dist',{recursive:true})\"",
+    "clean": "node scripts/clean.js",
     "copy:files": "node scripts/copy-files.js",
     "package": "pnpm run build && cd dist && zip -r ../chrome-tab-auto-grouping.zip .",
     "test": "vitest",
