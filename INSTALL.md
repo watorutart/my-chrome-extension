@@ -62,7 +62,7 @@ pnpm run package
 # 型チェック
 pnpm run type-check
 
-# Lint チュック
+# Lint チェック
 pnpm run lint
 
 # テスト実行
