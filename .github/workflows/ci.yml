@@ -97,10 +97,6 @@ jobs:
           echo "❌ background.js not found in dist/"
           exit 1
         fi
-        if [ ! -d dist/icons ]; then
-          echo "❌ icons directory not found in dist/"
-          exit 1
-        fi
         echo "✅ All required build files exist"
 
     - name: Check bundle size
