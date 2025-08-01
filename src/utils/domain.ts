@@ -1,5 +1,5 @@
-import { IGNORED_URL_PATTERNS } from '../constants';
 import type { TabInfo } from '../types';
+import { isValidTabUrl } from './url-validation';
 
 /**
  * URLからドメイン名を抽出する
@@ -13,8 +13,7 @@ export function extractDomain(url?: string): string | null {
   }
 
   // Check if URL should be ignored
-  const shouldIgnore = IGNORED_URL_PATTERNS.some(pattern => url.startsWith(pattern));
-  if (shouldIgnore) {
+  if (!isValidTabUrl(url)) {
     return null;
   }
 

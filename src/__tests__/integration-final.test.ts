@@ -4,6 +4,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { handleTabCreated } from '../handlers/tab-created';
 import { handleTabUpdated } from '../handlers/tab-updated';
 import { handleTabMoved } from '../handlers/tab-moved';
+import { isValidTabUrl } from '../utils/url-validation';
 
 // Helper function to create a complete Tab object
 function createMockTab(overrides: Partial<chrome.tabs.Tab> = {}): chrome.tabs.Tab {
@@ -159,7 +160,7 @@ describe('タスク9 - 統合テストとE2Eテスト', () => {
         await expect(handleTabCreated(tab)).resolves.not.toThrow();
         
         // Should not make Chrome API calls for invalid URLs
-        if (url && !url.startsWith('chrome://') && !url.startsWith('chrome-extension://') && !url.startsWith('data:')) {
+        if (isValidTabUrl(url)) {
           expect(mockChrome.tabs.query).toHaveBeenCalled();
           expect(mockChrome.tabGroups.query).toHaveBeenCalled();
         }

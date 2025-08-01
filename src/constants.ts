@@ -4,6 +4,7 @@ export const IGNORED_URL_PATTERNS = [
   'chrome://',
   'chrome-extension://',
   'about:',
+  'data:',
   'moz-extension://',
   'edge://',
   'opera://',

@@ -19,10 +19,11 @@ describe('定数テスト', () => {
       expect(IGNORED_URL_PATTERNS).toContain('chrome://');
       expect(IGNORED_URL_PATTERNS).toContain('chrome-extension://');
       expect(IGNORED_URL_PATTERNS).toContain('about:');
+      expect(IGNORED_URL_PATTERNS).toContain('data:');
     });
 
     it('正しい長さを持っていること', () => {
-      expect(IGNORED_URL_PATTERNS).toHaveLength(7);
+      expect(IGNORED_URL_PATTERNS).toHaveLength(8);
     });
   });
 
