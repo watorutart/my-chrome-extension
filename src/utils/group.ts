@@ -118,6 +118,21 @@ function convertTabGroupToGroupInfo(group: chrome.tabGroups.TabGroup, domain: st
 }
 
 /**
+ * 指定されたグループが存在するかどうかを確認する
+ * @param groupId - 確認対象のグループID
+ * @returns グループが存在する場合はtrue
+ */
+async function verifyGroupExists(groupId: number): Promise<boolean> {
+  try {
+    await chrome.tabGroups.get(groupId);
+    return true;
+  } catch (error) {
+    console.warn(`Group with id ${groupId} does not exist:`, error);
+    return false;
+  }
+}
+
+/**
  * 指定されたタブを既存のグループに追加する
  * @param tabIds - 追加するタブのID（単一または配列）
  * @param groupId - 追加先のグループID
@@ -125,6 +140,13 @@ function convertTabGroupToGroupInfo(group: chrome.tabGroups.TabGroup, domain: st
  */
 export async function addTabToGroup(tabIds: number | number[], groupId: number): Promise<boolean> {
   try {
+    // グループの存在を事前に確認
+    const groupExists = await verifyGroupExists(groupId);
+    if (!groupExists) {
+      console.error(`Cannot add tab to group: Group with id ${groupId} does not exist`);
+      return false;
+    }
+
     const tabIdArray = Array.isArray(tabIds) ? tabIds : [tabIds];
     
     await chrome.tabs.group({
