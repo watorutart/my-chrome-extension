@@ -181,7 +181,8 @@ describe('グループユーティリティテスト', () => {
       expect(chrome.tabs.group).toHaveBeenCalledWith({
         tabIds: [100]
       });
-      expect(chrome.tabs.ungroup).toHaveBeenCalledWith([100]);
+      // After the fix, ungroup should NOT be called immediately
+      expect(chrome.tabs.ungroup).not.toHaveBeenCalled();
     });
 
     it('作成後にグループタイトルと色を更新できること', async () => {
