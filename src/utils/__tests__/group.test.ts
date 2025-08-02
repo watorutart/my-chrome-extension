@@ -221,11 +221,13 @@ describe('グループユーティリティテスト', () => {
 
   describe('addTabToGroup', () => {
     it('既存グループにタブを追加できること', async () => {
+      vi.mocked(chrome.tabGroups.get).mockResolvedValue({ id: 1, title: 'Test Group' } as any);
       vi.mocked(chrome.tabs.group).mockResolvedValue();
 
       const success = await addTabToGroup(123, 1);
       
       expect(success).toBe(true);
+      expect(chrome.tabGroups.get).toHaveBeenCalledWith(1);
       expect(chrome.tabs.group).toHaveBeenCalledWith({
         tabIds: [123],
         groupId: 1
@@ -233,18 +235,31 @@ describe('グループユーティリティテスト', () => {
     });
 
     it('Chrome APIエラー時にfalseを返すこと', async () => {
+      vi.mocked(chrome.tabGroups.get).mockResolvedValue({ id: 1, title: 'Test Group' } as any);
       vi.mocked(chrome.tabs.group).mockRejectedValue(new Error('API Error'));
 
       const success = await addTabToGroup(123, 1);
       expect(success).toBe(false);
     });
 
+    it('存在しないグループIDの場合はfalseを返すこと', async () => {
+      vi.mocked(chrome.tabGroups.get).mockRejectedValue(new Error('No group with id: 999'));
+
+      const success = await addTabToGroup(123, 999);
+      
+      expect(success).toBe(false);
+      expect(chrome.tabGroups.get).toHaveBeenCalledWith(999);
+      expect(chrome.tabs.group).not.toHaveBeenCalled();
+    });
+
     it('複数タブを処理できること', async () => {
+      vi.mocked(chrome.tabGroups.get).mockResolvedValue({ id: 1, title: 'Test Group' } as any);
       vi.mocked(chrome.tabs.group).mockResolvedValue();
 
       const success = await addTabToGroup([123, 456], 1);
       
       expect(success).toBe(true);
+      expect(chrome.tabGroups.get).toHaveBeenCalledWith(1);
       expect(chrome.tabs.group).toHaveBeenCalledWith({
         tabIds: [123, 456],
         groupId: 1
