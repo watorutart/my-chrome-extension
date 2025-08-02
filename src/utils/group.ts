@@ -71,8 +71,8 @@ export async function createGroupForDomain(domain: string, windowId: number): Pr
       color
     });
     
-    // Remove the temporary tab from the group
-    await chrome.tabs.ungroup([tabs[0].id!]);
+    // Keep the temporary tab in the group to prevent auto-deletion
+    // It will be replaced when the first matching domain tab is added
     
     return convertTabGroupToGroupInfo(updatedGroup, domain);
   } catch (error) {
@@ -133,6 +133,33 @@ async function verifyGroupExists(groupId: number): Promise<boolean> {
 }
 
 /**
+ * グループから一時的なタブ（chrome:// など）を削除する
+ * @param groupId - 対象のグループID
+ */
+async function removeTemporaryTabsFromGroup(groupId: number): Promise<void> {
+  try {
+    const tabs = await chrome.tabs.query({ groupId });
+    const temporaryTabs = tabs.filter(tab => 
+      tab.url && (
+        tab.url.startsWith('chrome://') ||
+        tab.url.startsWith('chrome-extension://') ||
+        tab.url.startsWith('about:') ||
+        tab.url === ''
+      )
+    );
+    
+    if (temporaryTabs.length > 0) {
+      const temporaryTabIds = temporaryTabs.map(tab => tab.id).filter(id => id !== undefined) as number[];
+      if (temporaryTabIds.length > 0) {
+        await chrome.tabs.ungroup(temporaryTabIds);
+      }
+    }
+  } catch (error) {
+    console.warn('Error removing temporary tabs from group:', error);
+  }
+}
+
+/**
  * 指定されたタブを既存のグループに追加する
  * @param tabIds - 追加するタブのID（単一または配列）
  * @param groupId - 追加先のグループID
@@ -153,6 +180,9 @@ export async function addTabToGroup(tabIds: number | number[], groupId: number):
       tabIds: tabIdArray,
       groupId
     });
+    
+    // Remove any temporary tabs that don't match the domain
+    await removeTemporaryTabsFromGroup(groupId);
     
     return true;
   } catch (error) {
