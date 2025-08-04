@@ -101,7 +101,7 @@ describe('タブ移動ハンドラーテスト', () => {
 
       await handleTabMoved(tabId, moveInfo);
 
-      expect(mockCreateGroupForDomain).toHaveBeenCalledWith('example.com', 2);
+      expect(mockCreateGroupForDomain).toHaveBeenCalledWith('example.com', 2, 123);
       expect(mockAddTabToGroup).toHaveBeenCalledWith(123, 2);
     });
 
@@ -240,7 +240,7 @@ describe('タブ移動ハンドラーテスト', () => {
 
       await handleTabMoved(tabId, moveInfo);
 
-      expect(mockCreateGroupForDomain).toHaveBeenCalledWith('example.com', 2);
+      expect(mockCreateGroupForDomain).toHaveBeenCalledWith('example.com', 2, 123);
       expect(mockAddTabToGroup).not.toHaveBeenCalled();
     });
 

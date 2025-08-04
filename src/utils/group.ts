@@ -49,17 +49,24 @@ export async function findGroupByDomain(domain: string, windowId?: number): Prom
  * @param windowId - グループを作成するウィンドウID
  * @returns 作成されたグループ情報（作成に失敗した場合はnull）
  */
-export async function createGroupForDomain(domain: string, windowId: number): Promise<GroupInfo | null> {
+export async function createGroupForDomain(domain: string, windowId: number, targetTabId?: number): Promise<GroupInfo | null> {
   try {
-    // Get a sample tab from the window to group initially
-    const tabs = await chrome.tabs.query({ windowId });
-    if (tabs.length === 0) {
-      return null;
+    let tabToGroup: number;
+    
+    // If a specific tab ID is provided, use it; otherwise get any tab from the window
+    if (targetTabId) {
+      tabToGroup = targetTabId;
+    } else {
+      const tabs = await chrome.tabs.query({ windowId });
+      if (tabs.length === 0) {
+        return null;
+      }
+      tabToGroup = tabs[0].id!;
     }
     
-    // Create the group by grouping the first available tab
+    // Create the group by grouping the target tab
     const groupId = await chrome.tabs.group({
-      tabIds: [tabs[0].id!]
+      tabIds: [tabToGroup]
     });
     
     // Select a color based on domain hash for consistency
@@ -70,9 +77,6 @@ export async function createGroupForDomain(domain: string, windowId: number): Pr
       title: `${AUTO_GROUP_PREFIX} ${domain}`,
       color
     });
-    
-    // Remove the temporary tab from the group
-    await chrome.tabs.ungroup([tabs[0].id!]);
     
     return convertTabGroupToGroupInfo(updatedGroup, domain);
   } catch (error) {

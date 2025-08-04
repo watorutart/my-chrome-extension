@@ -42,7 +42,7 @@ export async function handleTabMoved(
 
     // グループが存在しない場合は新しいグループを作成
     if (!targetGroup) {
-      targetGroup = await createGroupForDomain(domain, targetWindowId);
+      targetGroup = await createGroupForDomain(domain, targetWindowId, tab.id);
       if (!targetGroup) {
         console.warn(`Failed to create group for domain: ${domain} in window ${targetWindowId}`);
         return;

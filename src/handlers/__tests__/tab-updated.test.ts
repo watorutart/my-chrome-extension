@@ -122,7 +122,7 @@ describe('タブ更新ハンドラーテスト', () => {
 
       await handleTabUpdated(tabId, changeInfo, mockTab);
 
-      expect(mockCreateGroupForDomain).toHaveBeenCalledWith('new-example.com', 1);
+      expect(mockCreateGroupForDomain).toHaveBeenCalledWith('new-example.com', 1, 123);
       expect(mockAddTabToGroup).toHaveBeenCalledWith(123, 2);
     });
 

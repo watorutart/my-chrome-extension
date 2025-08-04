@@ -60,7 +60,7 @@ export async function handleTabUpdated(
 
     // グループが存在しない場合は新しいグループを作成
     if (!targetGroup) {
-      targetGroup = await createGroupForDomain(newDomain, currentTab.windowId);
+      targetGroup = await createGroupForDomain(newDomain, currentTab.windowId, currentTab.id);
       if (!targetGroup) {
         console.warn(`Failed to create group for domain: ${newDomain}`);
         return;
