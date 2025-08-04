@@ -165,8 +165,6 @@ describe('グループユーティリティテスト', () => {
       vi.mocked(chrome.tabs.query).mockResolvedValue(mockTabs as chrome.tabs.Tab[]);
       (vi.mocked(chrome.tabs.group) as any).mockResolvedValue(1);
       (vi.mocked(chrome.tabGroups.update) as any).mockResolvedValue(mockUpdatedGroup as chrome.tabGroups.TabGroup);
-      vi.mocked(chrome.tabs.ungroup).mockResolvedValue(undefined as any);
-
       const result = await createGroupForDomain('example.com', 1);
       
       expect(result).toEqual({
@@ -181,7 +179,7 @@ describe('グループユーティリティテスト', () => {
       expect(chrome.tabs.group).toHaveBeenCalledWith({
         tabIds: [100]
       });
-      expect(chrome.tabs.ungroup).toHaveBeenCalledWith([100]);
+      // chrome.tabs.ungroup is no longer called in createGroupForDomain
     });
 
     it('作成後にグループタイトルと色を更新できること', async () => {
@@ -201,8 +199,6 @@ describe('グループユーティリティテスト', () => {
       vi.mocked(chrome.tabs.query).mockResolvedValue(mockTabs as chrome.tabs.Tab[]);
       (vi.mocked(chrome.tabs.group) as any).mockResolvedValue(1);
       (vi.mocked(chrome.tabGroups.update) as any).mockResolvedValue(mockUpdatedGroup as chrome.tabGroups.TabGroup);
-      vi.mocked(chrome.tabs.ungroup).mockResolvedValue(undefined as any);
-
       await createGroupForDomain('example.com', 1);
 
       expect(chrome.tabGroups.update).toHaveBeenCalledWith(1, {

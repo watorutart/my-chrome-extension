@@ -71,7 +71,7 @@ describe('タブ作成ハンドラーテスト', () => {
 
       expect(mockExtractDomain).toHaveBeenCalledWith('https://example.com/page');
       expect(mockFindGroupByDomain).toHaveBeenCalledWith('example.com', 1);
-      expect(mockCreateGroupForDomain).toHaveBeenCalledWith('example.com', 1);
+      expect(mockCreateGroupForDomain).toHaveBeenCalledWith('example.com', 1, 123);
       expect(mockAddTabToGroup).toHaveBeenCalledWith(123, 2);
     });
 
@@ -133,7 +133,7 @@ describe('タブ作成ハンドラーテスト', () => {
 
       await handleTabCreated(mockTab);
 
-      expect(mockCreateGroupForDomain).toHaveBeenCalledWith('example.com', 1);
+      expect(mockCreateGroupForDomain).toHaveBeenCalledWith('example.com', 1, 123);
       expect(mockAddTabToGroup).not.toHaveBeenCalled();
     });
 

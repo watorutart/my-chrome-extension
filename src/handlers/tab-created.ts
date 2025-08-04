@@ -16,10 +16,15 @@ export async function handleTabCreated(tab: chrome.tabs.Tab): Promise<void> {
       return;
     }
 
-    const group = await getOrCreateGroupForDomain(domain, tab.windowId);
+    const group = await getOrCreateGroupForDomain(domain, tab.windowId, tab.id);
     if (!group) {
       console.error(`Failed to get or create group for domain: ${domain}`);
       return;
+    }
+
+    // タブがすでにグループに含まれているかチェック
+    if (tab.groupId === group.id) {
+      return; // 既にグループ化済み
     }
 
     await addTabToGroupSafely(tab.id!, group.id);
@@ -53,13 +58,13 @@ function canTabBeGrouped(tab: chrome.tabs.Tab): boolean {
  * @param windowId - ウィンドウID
  * @returns グループ情報（作成/取得に失敗した場合はnull）
  */
-async function getOrCreateGroupForDomain(domain: string, windowId: number) {
+async function getOrCreateGroupForDomain(domain: string, windowId: number, targetTabId?: number) {
   // Look for existing auto-generated group for this domain
   let group = await findGroupByDomain(domain, windowId);
   
   // Create new group if none exists
   if (!group) {
-    group = await createGroupForDomain(domain, windowId);
+    group = await createGroupForDomain(domain, windowId, targetTabId);
   }
 
   return group;
